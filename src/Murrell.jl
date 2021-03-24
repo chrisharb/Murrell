@@ -98,7 +98,7 @@ function H_mod(P::Dict(any), ds::Int64)
     dσ = TVRegDiff(σ1,100, 0.2, dx=P[:t_s][P[:I][1]+1]-P[:t_s][P[:I][1]],ε=1e-9)
     # dε = differentiate(t1,ε1,TotalVariation(),0.4,5e-3,maxit=2000)
     dε = TVRegDiff(ε1,100, 0.2, dx=P[:t_s][P[:I][1]+1]-P[:t_s][P[:I][1]],ε=1e-9)
-    III = findfirst(σ1 .> 40) #exclude portion of experiment <0.2% strain, can give misleading results
+    III = findfirst(σ1 .> 10) #exclude portion of experiment <0.2% strain, can give misleading results
     P[:h] = dσ[III:end]./dε[III:end]*1e-3 # Calculate the tangent modulus in GPa, excluding initial non-linearity
     P[:ε_h] = ε1
     h_max = maximum(P[:h][III:end])
