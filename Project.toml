@@ -1,0 +1,9 @@
+name = "Murrell"
+uuid = "d58dc98f-7828-4459-ab39-41c1aac586e2"
+authors = ["cwaha "]
+version = "0.1.0"
+
+[deps]
+DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
+NoiseRobustDifferentiation = "470638dc-0858-4731-a73a-678bdc45695b"
+XLSX = "fdbf4ff8-1666-58a4-91e7-1b58723a45e0"
