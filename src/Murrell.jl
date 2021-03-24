@@ -5,20 +5,20 @@ module Murrell
     gas medium triaxial, RIPL, UCL
 """
 
-export M-file, M_read, H_mod, SFP_read, JR
+export M_file, M_read, H_mod, SFP_read, JR
 using TDMSReader, XLSX, NoiseRobustDifferentiation
 using DelimitedFiles
 
 """
-    M_file(P::Dict(any), col::int64)
+    M_file(P, col::int64)
 
     Generate filepath and extract indices from spreadsheet log.xlsx
 
     #Arguments
-    - 'P::Dict(any)' : dictionary information pertaining to the 'Murrell'
+    - 'P' : dictionary information pertaining to the 'Murrell'
     - 'col::Int64' : column of file of interest in accompanying spread sheet
 """
-function M_file(P::Dict(Any),col::Int64)
+function M_file(P,col::Int64)
     if Sys.iswindows()
         xf = XLSX.readxlsx("C:\\Users\\cwaha\\Dropbox\\My PC (DESKTOP-8JF2H49)\\Documents\\UCL\\raw_lab data\\log.xlsx")
     else
@@ -41,13 +41,13 @@ function M_file(P::Dict(Any),col::Int64)
     end
 end
 """
-    M_read(P::Dict(any))
+    M_read(P)
 
     Open and read contents of .tdms file n.b. must be called after M_file
     #Arguments
-    - 'P::Dict(any)' : dictionary information pertaining to the 'Murrell'
+    - 'P' : dictionary information pertaining to the 'Murrell'
 """
-function M_read(P::Dict(Any))
+function M_read(P)
     #Read data from .tdms file
     tdmsIN = readtdms(P[:fid])
     P[:t_s] = tdmsIN.groups["Numeric"]["TimeStamp"].data
@@ -72,14 +72,14 @@ function M_read(P::Dict(Any))
     P[:σ_MPa_j] = P[:F_kN_j]./(0.25e-6π*P[:d_mm]^2) .*1e-3
 end
 """
-    H_mod(P::Dict(any),ds::Int64)
+    H_mod(P,ds::Int64)
 
     Calculate tangent moduli and yield stress using robust numerical differentiation N.B. must be called after M_read
 
     #Arguments
-    - 'P::Dict(any)' : dictionary information pertaining to the 'Murrell'
+    - 'P' : dictionary information pertaining to the 'Murrell'
 """
-function H_mod(P::Dict(any), ds::Int64)
+function H_mod(P, ds::Int64)
     ε1 = Array{Float64,1}(undef,1)
     σ1 = Array{Float64,1}(undef,1)
     t1 = Array{Float64,1}(undef,1)
@@ -116,15 +116,15 @@ function H_mod(P::Dict(any), ds::Int64)
     P[:εb] = ε2[findfirst(h.<0.5P[:E_GPa])]
 end
 """
-    SFP_read(fil)
+    SFP_read()
 
     Read and return data from program SFP_furnace_control_V2.vi
 
     #Arguments
-    - 'SFP::Dict(any)' : empty dictionary to store extracted data
+    - 'SFP' : empty dictionary to store extracted data
     - 'fil::string' : path to file
 """
-function SFP_read(SFP::dict(any),fil)
+function SFP_read(SFP,fil)
     path="/Users/christopherharbord/Dropbox/My PC (DESKTOP-8JF2H49)/Documents/UCL/Furnace_calibration/SFP_logging/"*fil
     dat = readdlm(path)
     headers = dat[:,1]
@@ -146,12 +146,12 @@ function SFP_read(SFP::dict(any),fil)
     deletat!(SFP[:TC2],I)
 end
 """
-    JR(P::Dict(any))
+    JR(P)
 
     Calculate strength contribution of copper jacket for corrections
 
     #Arguments
-    - 'P::Dict(any)' : dictionary information pertaining to the 'Murrell'
+    - 'P' : dictionary information pertaining to the 'Murrell'
 """
 function JR(P)
     #Inputs: passed as a dictionary
