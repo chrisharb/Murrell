@@ -239,4 +239,3 @@ function M_interp!(P, t_UT)
     P[:σ3_MPa_i] = lininterp(P[:t_s],P[:PC2_MPa], t_UT)
     P[:ε_i] = lininterp(P[:t_s],P[:ε], t_UT)
 end
-end
