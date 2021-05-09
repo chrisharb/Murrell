@@ -73,7 +73,7 @@ function M_reduce!(P,exp_info)
     P[:U_mm_c] = ((P[:U1_mm].+P[:U2_mm]).-(P[:U1_mm][I1]+P[:U2_mm][I1]))./2
     P[:U_mm_fc] = P[:U_mm_c] .-(P[:F_kN_c]*exp_info[:K_mm_kN])
     P[:ε] = P[:U_mm_fc]./exp_info[:L_mm]
-    P[:Jr] = JR(P, exp_info)
+    P[:Jr] = JR!(P, exp_info)
     P[:F_kN_j] = P[:F_kN_c] .-P[:Jr]
     P[:σ_MPa] = P[:F_kN_c]./(0.25e-6π*exp_info[:d_mm]^2) .*1e-3
     P[:σ_MPa_j] = P[:F_kN_j]./(0.25e-6π*exp_info[:d_mm]^2) .*1e-3
